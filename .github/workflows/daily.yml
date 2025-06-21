@@ -1,0 +1,28 @@
+name: Daily Commit
+
+on:
+  schedule:
+    - cron: '42 0 * * *'  # runs daily at 00:42 UTC
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update timestamp file (22f2000997@ds.study.iitm.ac.in)
+        run: |
+          echo "Last commit time: $(date -u)" > .daily-commit.txt
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push changes
+        run: |
+          git add .daily-commit.txt
+          git commit -m "chore: daily commit at $(date -u '+%Y-%m-%dT%H:%M:%SZ')" || echo "No changes to commit"
+          git push
