@@ -8,10 +8,13 @@ on:
 jobs:
   daily-commit:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write  # 👈 required to push to the repo
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true  # 👈 ensures GITHUB_TOKEN is used
 
       - name: Update timestamp file (22f2000997@ds.study.iitm.ac.in)
         run: |
